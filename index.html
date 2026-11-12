@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#071923">
+    <title>Saltwind — The Shattered Cays</title>
+    <link rel="icon" type="image/svg+xml" href="assets/saltwind-mark.svg">
+    <link rel="stylesheet" href="styles.css">
+    <script src="three.min.js" defer></script>
+    <script src="game.js" defer></script>
+  </head>
+  <body>
+    <main class="game-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Saltwind home"><span class="brand-mark" aria-hidden="true">✦</span><span>SALTWIND <small>THE SHATTERED CAYS</small></span></a>
+        <div class="top-note"><span class="live-dot"></span> SINGLE-PLAYER 3D ADVENTURE</div>
+        <button id="fullscreen-button" class="header-button" type="button">⛶ FULLSCREEN</button>
+        <button id="sound-button" class="header-button" type="button" aria-pressed="true"><span aria-hidden="true">♫</span> MUSIC ON</button>
+      </header>
+
+      <section class="game-card" aria-label="Saltwind 3D pirate adventure">
+        <div class="game-heading">
+          <div><p class="eyebrow">THREE ISLANDS. ONE LAST VOYAGE.</p><h1>Find your fortune. <em>Face the storm.</em></h1></div>
+          <p class="heading-copy">Sail behind your ship, step ashore, and uncover the secret linking three dangerous islands.</p>
+        </div>
+
+        <div class="arena" id="arena">
+          <canvas id="game" aria-label="Interactive 3D pirate island game"></canvas>
+
+          <section id="intro" class="overlay">
+            <form id="start-form" class="intro-panel">
+              <span class="panel-kicker">A NEW CAPTAIN IS NEEDED</span>
+              <h2>Your legend starts here.</h2>
+              <p>Give your captain a name. Then sail for three lost islands, battle their guardians, and claim the treasure.</p>
+              <label class="name-label" for="captain-name">CAPTAIN'S NAME</label>
+              <input id="captain-name" name="captain" maxlength="18" autocomplete="given-name" placeholder="Enter your name" required>
+              <div class="controls-grid">
+                <div><span class="key-badge">W A S D</span><b>MOVE / SAIL</b><small>Steer on the sea · explore on shore</small></div>
+                <div><span class="key-badge">MOUSE</span><b>LOOK / TURN</b><small>Click and drag to look · Esc pauses</small></div>
+                <div><span class="key-badge">SPACE</span><b>ATTACK</b><small>Cutlass on land · cannon at sea</small></div>
+                <div><span class="key-badge">Q</span><b>SPECIAL ATTACK</b><small>Storm strike · broadside while sailing</small></div>
+                <div><span class="key-badge">R</span><b>THROW FIREBOMB</b><small>Explodes near shore guardians</small></div>
+                <div><span class="key-badge">E</span><b>BOARD / INTERACT</b><small>At your ship, shore or treasure</small></div>
+              </div>
+              <button id="start-button" class="primary-button" type="submit">BEGIN THE VOYAGE <span aria-hidden="true">→</span></button>
+              <span class="original-note">Original real-time 3D world · original pirate-style score</span>
+            </form>
+          </section>
+
+          <section id="hud" class="hud hidden" aria-live="polite">
+            <div class="quest-panel">
+              <div class="quest-kicker"><span id="level-number">LEVEL 01</span><span id="difficulty-label">◆ EASY</span></div>
+              <strong id="level-title">Drowned Palm</strong>
+              <span id="objective">Sail to the island</span>
+              <span id="distance-label">DESTINATION · -- m</span>
+            </div>
+            <div class="nav-compass"><small>WAYFINDER</small><span id="nav-arrow">↑</span><small>N</small></div>
+            <div class="hud-side">
+              <div class="health-panel">
+                <span><b id="captain-display">CAPTAIN</b><b id="health-value">100%</b></span>
+                <i class="health-track"><i id="health-fill"></i></i>
+                <small id="special-label">Q · SPECIAL READY</small>
+                <i class="special-track"><i id="special-fill"></i></i>
+                <small id="firebomb-label">R · FIREBOMB READY</small>
+                <i class="fire-track"><i id="firebomb-fill"></i></i>
+              </div>
+              <button id="mouse-button" class="mouse-button" type="button">CLICK / DRAG TO LOOK · ESC PAUSES</button>
+            </div>
+            <div id="center-prompt" class="center-prompt hidden">E · INTERACT</div>
+            <div id="story-card" class="story-card hidden" aria-live="polite">
+              <span id="story-kicker"></span>
+              <strong id="story-title"></strong>
+              <p id="story-copy"></p>
+            </div>
+            <div id="toast" class="toast hidden"></div>
+            <div class="control-strip"><span>WASD MOVE / SAIL</span><i></i><span>SPACE ATTACK / CANNON</span><i></i><span>Q SPECIAL</span><i></i><span>R FIREBOMB</span><i></i><span>E INTERACT</span><i></i><span>ESC PAUSE</span></div>
+          </section>
+
+          <section id="pause-overlay" class="overlay hidden">
+            <div class="small-panel"><span class="panel-kicker">CATCH YOUR BREATH</span><h2>Voyage paused.</h2><p>Your ship is waiting. The next island isn't going anywhere.</p><button id="resume-button" class="primary-button" type="button">BACK TO THE VOYAGE</button></div>
+          </section>
+
+          <section id="mission-overlay" class="overlay hidden">
+            <div class="small-panel"><span id="mission-kicker" class="panel-kicker">ISLAND CLEARED</span><h2 id="mission-title">A new shore awaits.</h2><p id="mission-copy"></p><button id="mission-button" class="primary-button" type="button">CONTINUE VOYAGE <span aria-hidden="true">→</span></button></div>
+          </section>
+        </div>
+
+        <div class="game-footer">
+          <div class="captain-score"><span class="player-icon">✦</span><span><b id="footer-captain">CAPTAIN</b><small>ISLAND TREASURE</small></span><strong id="gold-value">000</strong><i>gold</i></div>
+          <div class="campaign-info"><span id="campaign-status">YOUR STORY · 3 ISLANDS</span><div class="campaign-dots"><i></i><i></i><i></i></div></div>
+          <div class="footer-hint"><span class="ship-icon">⚓</span><span>THIRD-PERSON SAILING<small>THIRD-PERSON EXPLORATION</small></span></div>
+        </div>
+      </section>
+
+      <footer class="page-footer">Original browser-based 3D adventure · Synthesized pirate-style music · No film assets or soundtrack</footer>
+    </main>
+  </body>
+</html>
